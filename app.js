@@ -1,3 +1,15 @@
+/**
+ * File: app.js
+ * Description: Main application configuration file for the HustleHub+ backend API.
+ * Sets up Express middleware, security headers, base health-check routing, and 
+ * error-handling middleware.
+ * 
+ * References:
+ * - Express.js Documentation: https://expressjs.com/
+ * - Helmet Security Middleware: https://helmetjs.github.io/
+ * - CORS Middleware: https://github.com/expressjs/cors
+ */
+
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -6,20 +18,20 @@ const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 
-// 1. Apply Security and Utility Middleware
-app.use(helmet()); // Configure Helmet for security headers
-app.use(cors()); // Allow cross-origin requests
-app.use(express.json()); // Parse incoming JSON payloads
+// Application Security and Utility Middleware Configuration
+app.use(helmet()); // Applies secure HTTP headers to mitigate common web vulnerabilities
+app.use(cors()); // Enables Cross-Origin Resource Sharing based on project policy
+app.use(express.json()); // Parses incoming JSON payloads into request.body
 
-// 2. Base Routes
+// Base System Health Check Route
 app.get('/api/health', (req, res) => {
     res.status(200).json({ status: 'success', message: 'HustleHub API is running securely!' });
 });
 
-// 3. API Routes
+// Primary API Router Mounts
 app.use('/api/auth', authRoutes);
 
-// 4. Global Error Handler (Must be last)
+// Global Error-Handling Middleware (Must be registered after all routes)
 app.use(errorHandler);
 
 module.exports = app;
