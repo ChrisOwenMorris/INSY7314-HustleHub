@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const authRoutes = require('./routes/authRoutes');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
@@ -15,7 +16,10 @@ app.get('/api/health', (req, res) => {
     res.status(200).json({ status: 'success', message: 'HustleHub API is running securely!' });
 });
 
-// 3. Global Error Handler
+// 3. API Routes
+app.use('/api/auth', authRoutes);
+
+// 4. Global Error Handler (Must be last)
 app.use(errorHandler);
 
 module.exports = app;
