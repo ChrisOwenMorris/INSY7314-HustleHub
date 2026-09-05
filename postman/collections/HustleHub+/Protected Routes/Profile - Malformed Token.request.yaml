@@ -2,7 +2,7 @@ $kind: http-request
 url: "{{baseUrl}}/api/auth/profile"
 method: GET
 headers:
-  Authorization: "{{bearer_token_0nr3}}"
+  Authorization: "Bearer this.is.not.a.valid.token"
 scripts:
   - type: afterResponse
     code: |-
