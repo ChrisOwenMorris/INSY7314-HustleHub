@@ -1,0 +1,17 @@
+$kind: http-request
+url: "{{baseUrl}}/api/auth/profile"
+method: GET
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code is 401', function () {
+          pm.response.to.have.status(401);
+      });
+
+      pm.test('Message indicates no token', function () {
+          var jsonData = pm.response.json();
+          var message = jsonData.message || jsonData.error || '';
+          pm.expect(message.toLowerCase()).to.include('no token');
+      });
+    language: text/javascript
+order: 2000

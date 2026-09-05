@@ -1,0 +1,24 @@
+$kind: http-request
+url: "{{baseUrl}}/api/auth/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+        "username": "<script>alert('xss')</script>",
+        "email": "xsstest@example.com",
+        "password": "SecurePass1",
+        "role": "freelancer"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Response body does not contain raw script tags', function () {
+          var responseText = pm.response.text();
+          pm.expect(responseText).to.not.include('<script>');
+          pm.expect(responseText).to.not.include('</script>');
+      });
+    language: text/javascript
+order: 8000

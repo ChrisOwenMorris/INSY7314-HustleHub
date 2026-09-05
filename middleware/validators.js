@@ -31,6 +31,7 @@ const registerValidationRules = [
     body('role')
         .trim()
         .notEmpty().withMessage('Role is required.')
+        .isIn(['client', 'freelancer', 'admin']).withMessage('Role must be one of: client, freelancer, admin.')
         .escape()
 ];
 

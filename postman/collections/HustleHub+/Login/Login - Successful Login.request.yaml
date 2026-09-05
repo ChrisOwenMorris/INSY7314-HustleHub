@@ -1,0 +1,35 @@
+$kind: http-request
+url: "{{baseUrl}}/api/auth/login"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+        "email": "jane@example.com",
+        "password": "SecurePass1"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code is 200', function () {
+          pm.response.to.have.status(200);
+      });
+
+      var jsonData = pm.response.json();
+
+      pm.test('Token exists in response', function () {
+          pm.expect(jsonData.data && jsonData.data.token).to.exist;
+      });
+
+      pm.test('User data returned without password', function () {
+          pm.expect(jsonData.data && jsonData.data.user).to.exist;
+          pm.expect(jsonData.data.user).to.not.have.property('password');
+      });
+
+      if (jsonData.data && jsonData.data.token) {
+          pm.collectionVariables.set('authToken', jsonData.data.token);
+      }
+    language: text/javascript
+order: 1000

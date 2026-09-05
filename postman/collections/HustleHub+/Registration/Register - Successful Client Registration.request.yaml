@@ -1,0 +1,28 @@
+$kind: http-request
+url: "{{baseUrl}}/api/auth/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+        "username": "johndoe",
+        "email": "john@example.com",
+        "password": "SecurePass1",
+        "role": "client"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code is 201', function () {
+          pm.response.to.have.status(201);
+      });
+
+      pm.test('Role is client', function () {
+          var jsonData = pm.response.json();
+          var role = jsonData.data && jsonData.data.role;
+          pm.expect(role).to.eql('client');
+      });
+    language: text/javascript
+order: 2000

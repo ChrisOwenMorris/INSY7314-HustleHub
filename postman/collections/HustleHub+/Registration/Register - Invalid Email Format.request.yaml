@@ -1,0 +1,31 @@
+$kind: http-request
+url: "{{baseUrl}}/api/auth/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+        "username": "baduser",
+        "email": "not-an-email",
+        "password": "SecurePass1",
+        "role": "freelancer"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code is 400', function () {
+          pm.response.to.have.status(400);
+      });
+
+      pm.test('Email field error is present', function () {
+          var jsonData = pm.response.json();
+          var details = jsonData.details || [];
+          var found = details.some(function (e) {
+              return e.field === 'email';
+          });
+          pm.expect(found).to.be.true;
+      });
+    language: text/javascript
+order: 5000

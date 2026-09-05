@@ -1,0 +1,21 @@
+$kind: http-request
+url: "{{baseUrl}}/api/auth/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: "{}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code is 400', function () {
+          pm.response.to.have.status(400);
+      });
+
+      pm.test('Validation errors array is not empty', function () {
+          var jsonData = pm.response.json();
+          pm.expect(jsonData.details).to.be.an('array').that.is.not.empty;
+      });
+    language: text/javascript
+order: 4000

@@ -1,0 +1,5 @@
+$kind: collection
+description: "API test collection for HustleHub. NOTE: The backend uses a self-signed SSL certificate for local HTTPS. You must disable SSL certificate verification in Postman (Settings > General > SSL certificate verification: OFF) before running these requests against https://localhost:3000."
+variables:
+  baseUrl: https://localhost:3000
+  authToken: ""
