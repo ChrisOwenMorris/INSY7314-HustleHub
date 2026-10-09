@@ -15,8 +15,9 @@ const cors = require('cors');
 const helmet = require('helmet');
 const authRoutes = require('./routes/authRoutes');
 const errorHandler = require('./middleware/errorHandler');
-app.use(configureSecurityHeaders());
-app.use(sanitizeGuard);
+const configureSecurityHeaders = require('./middleware/securityHeaders');
+const sanitizeGuard = require('./middleware/sanitizeGuard');
+const gigRoutes = require('./routes/gigRoutes');
 
 const app = express();
 
@@ -24,6 +25,8 @@ const app = express();
 app.use(helmet()); // Applies secure HTTP headers to mitigate common web vulnerabilities
 app.use(cors()); // Enables Cross-Origin Resource Sharing based on project policy
 app.use(express.json()); // Parses incoming JSON payloads into request.body
+app.use(configureSecurityHeaders());
+app.use(sanitizeGuard);
 
 // Base System Health Check Route
 app.get('/api/health', (req, res) => {
@@ -32,6 +35,7 @@ app.get('/api/health', (req, res) => {
 
 // Primary API Router Mounts
 app.use('/api/auth', authRoutes);
+app.use('/api/gigs', gigRoutes);
 
 // Global Error-Handling Middleware (Must be registered after all routes)
 app.use(errorHandler);
