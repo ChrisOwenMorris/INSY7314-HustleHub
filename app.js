@@ -15,6 +15,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const authRoutes = require('./routes/authRoutes');
 const errorHandler = require('./middleware/errorHandler');
+app.use(configureSecurityHeaders());
+app.use(sanitizeGuard);
 
 const app = express();
 
